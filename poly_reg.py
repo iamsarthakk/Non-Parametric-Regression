@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from numpy.linalg import inv
+import pandas as pd
 
 #It is the function that calculates and outputs the hypothesis value of the Target Variable,
 #given theta (theta_0, theta_1, theta_2, …., theta_n),
@@ -18,12 +19,13 @@ def hypothesis(theta, X, n):
     h = h.reshape(X.shape[0])
     return h
 
-data = np.loadtxt('data1.txt', delimiter=',')
-
+data = pd.read_csv('1051.txt',sep="\t")
+X = data['0.03428']
+Y = data['96.701']
 #Polynomial Regression using normal equation
-def poly_reg_normal(data):
-    X_train = data[:,0] #the feature_set
-    y_train = data[:,1] #the labels
+def poly_reg_normal(data, n):
+    X_train = data['0.03428'] #the feature_set
+    y_train = data['96.701'] #the labels
     x_array = np.ones((X_train.shape[0], n+1))
     for i in range(0,X_train.shape[0]):
         for j in range(0,n+1):
@@ -31,3 +33,9 @@ def poly_reg_normal(data):
     theta = np.matmul(np.matmul(inv(np.matmul(x_array.transpose()
                       , x_array)), x_array.transpose()), y_train)
     return theta;
+
+theta = poly_reg_normal(data, 5)
+h = hypothesis(theta, X, 5)
+plt.scatter(X, Y)
+plt.plot(X, h, color='red')
+plt.show()
